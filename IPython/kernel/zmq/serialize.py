@@ -14,7 +14,7 @@ Authors:
 #-----------------------------------------------------------------------------
 # Imports
 #-----------------------------------------------------------------------------
-
+import sys
 try:
     import cPickle
     pickle = cPickle
@@ -119,9 +119,10 @@ def unserialize_object(buffers, g=None):
     """
     bufs = list(buffers)
     pobj = bufs.pop(0)
-    if not isinstance(pobj, bytes):
-        # a zmq message
-        pobj = bytes(pobj)
+    if sys.platform != 'cli':
+        if not isinstance(pobj, bytes):
+            # a zmq message
+            pobj = bytes(pobj)
     canned = pickle.loads(pobj)
     if istype(canned, sequence_types) and len(canned) < MAX_ITEMS:
         for c in canned:

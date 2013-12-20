@@ -18,6 +18,8 @@ import Queue
 from IPython.kernel.channels import IOPubChannel, HBChannel, \
     ShellChannel, StdInChannel
 
+import minilog
+
 #-----------------------------------------------------------------------------
 # Blocking kernel manager
 #-----------------------------------------------------------------------------
@@ -30,15 +32,19 @@ class BlockingChannelMixin(object):
         self._in_queue = Queue.Queue()
 
     def call_handlers(self, msg):
+        minilog.log("Blocking Channel Mixin " + str(self) + " recieved message: " + str(msg))
         self._in_queue.put(msg)
 
     def get_msg(self, block=True, timeout=None):
         """ Gets a message if there is one that is ready. """
+        minilog.log("Blocking Channel Mixin " + str(self) + " get_msg called")
         if timeout is None:
             # Queue.get(timeout=None) has stupid uninteruptible
             # behavior, so wait for a week instead
             timeout = 604800
-        return self._in_queue.get(block, timeout)
+        ret = self._in_queue.get(block, timeout)
+        minilog.log("Blocking Channel Mixin get_msg " + str(self) + " about to return:" + str(msg))
+        return ret
 
     def get_msgs(self):
         """ Get all messages that are currently ready. """

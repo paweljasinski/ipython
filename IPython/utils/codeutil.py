@@ -32,10 +32,28 @@ def code_ctor(*args):
 def reduce_code(co):
     if co.co_freevars or co.co_cellvars:
         raise ValueError("Sorry, cannot pickle code objects with closures")
-    args =  [co.co_argcount, co.co_nlocals, co.co_stacksize,
+    print co.co_argcount
+    print     co.co_nlocals
+#    print     co.co_stacksize,
+    print     co.co_flags
+    print     co.co_code
+    print     co.co_consts
+    print     co.co_names
+    print     co.co_varnames
+    print     co.co_filename
+    print     co.co_name
+    print     co.co_firstlineno,
+#    print     co.co_lnotab
+
+    args =  [co.co_argcount, co.co_nlocals,
             co.co_flags, co.co_code, co.co_consts, co.co_names,
-            co.co_varnames, co.co_filename, co.co_name, co.co_firstlineno,
-            co.co_lnotab]
+            co.co_varnames, co.co_filename, co.co_name, co.co_firstlineno
+            ]
+#    args =  [co.co_argcount, co.co_nlocals, co.co_stacksize,
+#            co.co_flags, co.co_code, co.co_consts, co.co_names,
+#            co.co_varnames, co.co_filename, co.co_name, co.co_firstlineno,
+#            co.co_lnotab]
+
     if sys.version_info[0] >= 3:
         args.insert(1, co.co_kwonlyargcount)
     return code_ctor, tuple(args)

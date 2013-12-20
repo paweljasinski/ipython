@@ -12,8 +12,9 @@ import os
 import threading
 import time
 import uuid
-from io import StringIO, UnsupportedOperation
-
+#from io import StringIO, UnsupportedOperation
+from io import UnsupportedOperation
+from StringIO import StringIO
 import zmq
 
 from session import extract_header

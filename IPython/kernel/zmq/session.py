@@ -31,6 +31,7 @@ import os
 import pprint
 import random
 import uuid
+import sys
 from datetime import datetime
 
 try:
@@ -79,7 +80,7 @@ def squash_unicode(obj):
 #-----------------------------------------------------------------------------
 
 # ISO8601-ify datetime objects
-json_packer = lambda obj: jsonapi.dumps(obj, default=date_default)
+json_packer = lambda obj: bytes(jsonapi.dumps(obj, default=date_default), "iso-8859-1")
 json_unpacker = lambda s: extract_dates(jsonapi.loads(s))
 
 pickle_packer = lambda o: pickle.dumps(o,-1)
@@ -616,7 +617,19 @@ class Session(Configurable):
         to_send.extend(buffers)
         longest = max([ len(s) for s in to_send ])
         copy = (longest < self.copy_threshold)
-        
+
+        if sys.platform == 'cli':
+            sanitized = []
+            for e in to_send:
+                import minilog
+                if isinstance(e, bytes):
+                    minilog.log("already bytes: " + str(e))
+                    sanitized.append(e)
+                else:
+                    minilog.log("not bytes:" + str(e))
+                    sanitized.append(bytes(e,'iso-8859-1'))
+            to_send = sanitized
+
         if buffers and track and not copy:
             # only really track when we are doing zero-copy buffers
             tracker = stream.send_multipart(to_send, copy=False, track=True)

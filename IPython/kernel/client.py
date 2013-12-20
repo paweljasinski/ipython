@@ -30,7 +30,7 @@ from .channels import (
 from .clientabc import KernelClientABC
 from .connect import ConnectionFileMixin
 
-
+import minilog
 #-----------------------------------------------------------------------------
 # Main kernel client class
 #-----------------------------------------------------------------------------
@@ -82,6 +82,7 @@ class KernelClient(LoggingConfigurable, ConnectionFileMixin):
 
     def get_shell_msg(self, *args, **kwargs):
         """Get a message from the shell channel"""
+        minilog.log(str(self) + " get_shell_msg called")
         return self.shell_channel.get_msg(*args, **kwargs)
 
     def get_iopub_msg(self, *args, **kwargs):

@@ -247,8 +247,12 @@ def launch_kernel(cmd, stdin=None, stdout=None, stderr=None,
         else:
             if ipython_kernel:
                 cmd += ['--parent=1']
+            if sys.platform == 'cli':
+                cmd.insert(1, '-X:Frames')
+            print "\n".join(cmd)
+
             proc = Popen(cmd,
-                         stdin=_stdin, stdout=_stdout, stderr=_stderr, cwd=cwd, env=os.environ)
+                         stdin=_stdin, stdout=_stdout, stderr=_stderr, cwd=cwd, env=dict(os.environ))
 
     # Clean up pipes created to work around Popen bug.
     if redirect_in:

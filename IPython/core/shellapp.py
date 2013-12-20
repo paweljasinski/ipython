@@ -38,6 +38,8 @@ from IPython.utils.traitlets import (
 )
 from IPython.lib.inputhook import guis
 
+import minilog
+
 #-----------------------------------------------------------------------------
 # Aliases and Flags
 #-----------------------------------------------------------------------------
@@ -262,18 +264,24 @@ class InteractiveShellApp(Configurable):
         """
         try:
             self.log.debug("Loading IPython extensions...")
+            minilog.log("Loading IPython extensions...")
             extensions = self.default_extensions + self.extensions
             for ext in extensions:
                 try:
                     self.log.info("Loading IPython extension: %s" % ext)
+                    minilog.log("Loading IPython extension: %s" % ext)
                     self.shell.extension_manager.load_extension(ext)
                 except:
                     self.log.warn("Error in loading extension: %s" % ext +
                         "\nCheck your config files in %s" % self.profile_dir.location
                     )
+                    minilog.log("Error in loading extension: %s" % ext +
+                        "\nCheck your config files in %s" % self.profile_dir.location
+                    )
                     self.shell.showtraceback()
         except:
             self.log.warn("Unknown error in loading extensions:")
+            minilog.log("Unknown error in loading extensions:")
             self.shell.showtraceback()
 
     def init_code(self):
@@ -283,7 +291,8 @@ class InteractiveShellApp(Configurable):
         self._run_exec_files()
         self._run_cmd_line_code()
         self._run_module()
-        
+
+        minilog.log(str(sys.stdout))
         # flush output, so itwon't be attached to the first cell
         sys.stdout.flush()
         sys.stderr.flush()

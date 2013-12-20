@@ -136,7 +136,7 @@ def write_connection_file(fname=None, shell_port=0, iopub_port=0, stdin_port=0, 
                 hb_port=hb_port,
               )
     cfg['ip'] = ip
-    cfg['key'] = bytes_to_str(key)
+    cfg['key'] = "" # bytes_to_str(key)
     cfg['transport'] = transport
     cfg['signature_scheme'] = signature_scheme
     
