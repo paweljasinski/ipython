@@ -18,6 +18,7 @@ Authors:
 
 import Cookie
 import logging
+import sys
 from tornado import web
 from tornado import websocket
 
@@ -69,7 +70,10 @@ class ZMQStreamHandler(websocket.WebSocketHandler):
         except Exception:
             self.log.critical("Malformed message: %r" % msg_list, exc_info=True)
         else:
-            self.write_message(msg)
+            if sys.platform != 'cli':
+                self.write_message(msg)
+            else:
+                self.write_message(bytes(msg))
 
     def allow_draft76(self):
         """Allow draft 76, until browsers such as Safari update to RFC 6455.

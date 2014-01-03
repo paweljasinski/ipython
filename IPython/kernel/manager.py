@@ -347,7 +347,7 @@ class KernelManager(LoggingConfigurable, ConnectionFileMixin):
         platforms.
         """
         if self.has_kernel:
-            if sys.platform == 'win32':
+            if sys.platform == 'win32' or sys.platform == 'cli': # TODO: be clever about mono
                 from .zmq.parentpoller import ParentPollerWindows as Poller
                 Poller.send_interrupt(self.kernel.win32_interrupt_event)
             else:

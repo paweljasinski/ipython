@@ -1002,6 +1002,8 @@ class Bytes(TraitType):
     def validate(self, obj, value):
         if isinstance(value, bytes):
             return value
+        if isinstance(value, unicode):
+            return value
         self.error(obj, value)
 
 

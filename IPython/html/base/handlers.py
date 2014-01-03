@@ -25,6 +25,7 @@ import mimetypes
 import os
 import stat
 import threading
+import sys
 
 from tornado import web
 from tornado import websocket
@@ -346,7 +347,10 @@ class FileFindHandler(web.StaticFileHandler):
             hasher.update(data)
             self.set_header("Etag", '"%s"' % hasher.hexdigest())
             if include_body:
-                self.write(data)
+                if sys.platform != 'cli':
+                    self.write(data)
+                else:
+                    self.write(bytes(data))
             else:
                 assert self.request.method == "HEAD"
                 self.set_header("Content-Length", len(data))

@@ -190,7 +190,7 @@ def launch_kernel(cmd, stdin=None, stdout=None, stderr=None,
         _stdout, _stderr = stdout, stderr
 
     # Spawn a kernel.
-    if sys.platform == 'win32':
+    if sys.platform == 'win32' or sys.platform == 'cli': # TODO: be clever about mono
         
         if cwd:
             # Popen on Python 2 on Windows cannot handle unicode cwd.
@@ -214,6 +214,9 @@ def launch_kernel(cmd, stdin=None, stdout=None, stderr=None,
                 if stderr is None:
                     cmd.append('--no-stderr')
 
+        if sys.platform == 'cli':
+            cmd.insert(1, '-X:Frames')
+
         # Launch the kernel process.
         if independent:
             proc = Popen(cmd,
@@ -232,8 +235,6 @@ def launch_kernel(cmd, stdin=None, stdout=None, stderr=None,
                                          True, # Inheritable by new processes.
                                          DUPLICATE_SAME_ACCESS)
                 cmd +=[ '--parent=%i' % handle ]
-            
-            
             proc = Popen(cmd,
                          stdin=_stdin, stdout=_stdout, stderr=_stderr, cwd=cwd, env=os.environ)
 
@@ -249,10 +250,8 @@ def launch_kernel(cmd, stdin=None, stdout=None, stderr=None,
                 cmd += ['--parent=1']
             if sys.platform == 'cli':
                 cmd.insert(1, '-X:Frames')
-            print "\n".join(cmd)
-
             proc = Popen(cmd,
-                         stdin=_stdin, stdout=_stdout, stderr=_stderr, cwd=cwd, env=dict(os.environ))
+                         stdin=_stdin, stdout=_stdout, stderr=_stderr, cwd=cwd, env=os.environ)
 
     # Clean up pipes created to work around Popen bug.
     if redirect_in:
