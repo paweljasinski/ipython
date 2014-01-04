@@ -70,10 +70,7 @@ class ZMQStreamHandler(websocket.WebSocketHandler):
         except Exception:
             self.log.critical("Malformed message: %r" % msg_list, exc_info=True)
         else:
-            if sys.platform != 'cli':
-                self.write_message(msg)
-            else:
-                self.write_message(bytes(msg))
+            self.write_message(msg)
 
     def allow_draft76(self):
         """Allow draft 76, until browsers such as Safari update to RFC 6455.
