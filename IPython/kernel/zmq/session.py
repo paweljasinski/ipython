@@ -79,15 +79,9 @@ def squash_unicode(obj):
 # globals and defaults
 #-----------------------------------------------------------------------------
 
-def json_packer_fn(obj):
-    tmp = jsonapi.dumps(obj, default=date_default)
-    tmp2 = bytes(tmp, "iso-8859-1")
-    return tmp2
-
 
 # ISO8601-ify datetime objects
-#json_packer = lambda obj: bytes(jsonapi.dumps(obj, default=date_default), "iso-8859-1")
-json_packer = json_packer_fn
+json_packer = lambda obj: bytes(jsonapi.dumps(obj, default=date_default), "iso-8859-1")
 json_unpacker = lambda s: extract_dates(jsonapi.loads(s))
 
 pickle_packer = lambda o: pickle.dumps(o,-1)
@@ -626,16 +620,11 @@ class Session(Configurable):
         copy = (longest < self.copy_threshold)
 
         if sys.platform == 'cli':
-            sanitized = []
-            for e in to_send:
-                import minilog
-                if isinstance(e, bytes):
-                    minilog.log("already bytes: " + str(e))
-                    sanitized.append(e)
+            for i, el in enumerate(to_send):
+                if isinstance(el, bytes):
+                    continue
                 else:
-                    minilog.log("not bytes:" + str(e))
-                    sanitized.append(bytes(e,'iso-8859-1'))
-            to_send = sanitized
+                    to_send[i] = bytes(el,'iso-8859-1')
 
         if buffers and track and not copy:
             # only really track when we are doing zero-copy buffers
