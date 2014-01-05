@@ -79,8 +79,15 @@ def squash_unicode(obj):
 # globals and defaults
 #-----------------------------------------------------------------------------
 
+def json_packer_fn(obj):
+    tmp = jsonapi.dumps(obj, default=date_default)
+    tmp2 = bytes(tmp, "iso-8859-1")
+    return tmp2
+
+
 # ISO8601-ify datetime objects
-json_packer = lambda obj: bytes(jsonapi.dumps(obj, default=date_default), "iso-8859-1")
+#json_packer = lambda obj: bytes(jsonapi.dumps(obj, default=date_default), "iso-8859-1")
+json_packer = json_packer_fn
 json_unpacker = lambda s: extract_dates(jsonapi.loads(s))
 
 pickle_packer = lambda o: pickle.dumps(o,-1)

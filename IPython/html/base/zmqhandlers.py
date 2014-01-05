@@ -18,7 +18,6 @@ Authors:
 
 import Cookie
 import logging
-import sys
 from tornado import web
 from tornado import websocket
 
