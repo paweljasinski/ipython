@@ -25,8 +25,10 @@ import sys
 import tempfile
 
 from contextlib import contextmanager
-#from io import StringIO
-from StringIO import StringIO
+if sys.platform != 'cli':
+    from io import StringIO
+else:
+    from StringIO import StringIO
 from subprocess import Popen, PIPE
 
 try:

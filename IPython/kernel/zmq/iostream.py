@@ -12,9 +12,12 @@ import os
 import threading
 import time
 import uuid
-#from io import StringIO, UnsupportedOperation
 from io import UnsupportedOperation
-from StringIO import StringIO
+import sys
+if sys.platform != 'cli':
+    from io import StringIO
+else:
+    from StringIO import StringIO
 import zmq
 
 from session import extract_header

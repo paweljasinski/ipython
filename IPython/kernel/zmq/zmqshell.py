@@ -51,8 +51,6 @@ from IPython.kernel.zmq.datapub import ZMQDataPublisher
 from IPython.kernel.zmq.session import extract_header
 from session import Session
 
-import minilog
-
 #-----------------------------------------------------------------------------
 # Functions and classes
 #-----------------------------------------------------------------------------
@@ -566,10 +564,7 @@ class ZMQInteractiveShell(InteractiveShell):
         # to pick up
         topic = None
         if dh.topic:
-            if sys.platform != 'cli':
-                topic = dh.topic.replace(b'pyout', b'pyerr')
-            else:
-                topic = dh.topic.replace('pyout', 'pyerr')
+            topic = dh.topic.replace(py3compat.bytes_typei('pyout'), py3compat.bytes_type('pyerr'))
         
         exc_msg = dh.session.send(dh.pub_socket, u'pyerr', json_clean(exc_content), dh.parent_header, ident=topic)
 

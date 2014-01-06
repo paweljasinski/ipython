@@ -106,7 +106,6 @@ class ZMQChannelHandler(AuthenticatedZMQStreamHandler):
 
     def on_message(self, msg):
         msg = jsonapi.loads(msg)
-        print "msg: %s"%msg
         self.session.send(self.zmq_stream, msg)
 
     def on_close(self):

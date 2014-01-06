@@ -14,18 +14,11 @@
 
 import sys
 import unittest
-#from compiler.consts import CO_GENERATOR
 import inspect
 
 #-----------------------------------------------------------------------------
 # Classes and functions
 #-----------------------------------------------------------------------------
-
-#def isgenerator(func):
-#    try:
-#        return func.func_code.co_flags & CO_GENERATOR != 0
-#    except AttributeError:
-#        return False
 
 class ParametricTestCase(unittest.TestCase):
     """Write parametric tests in normal unittest testcase form.
