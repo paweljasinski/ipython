@@ -58,8 +58,6 @@ from session import (
 )
 from zmqshell import ZMQInteractiveShell
 
-import minilog
-
 #-----------------------------------------------------------------------------
 # Flags and Aliases
 #-----------------------------------------------------------------------------
@@ -453,14 +451,10 @@ class IPKernelApp(BaseIPythonApplication, InteractiveShellApp):
         sys.stderr.flush()
 
     def start(self):
-        minilog.log("start")
         if self.poller is not None:
-            minilog.log("calling poller start")
             self.poller.start()
-        minilog.log("calling kernel start")
         self.kernel.start()
         try:
-            minilog.log("calling ioloop.IOLoop.instance().start()")
             ioloop.IOLoop.instance().start()
         except KeyboardInterrupt:
             pass

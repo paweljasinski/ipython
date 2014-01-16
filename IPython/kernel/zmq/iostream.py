@@ -17,6 +17,7 @@ import sys
 if sys.platform != 'cli':
     from io import StringIO
 else:
+    # io.StringIO is broken in ironpython
     from StringIO import StringIO
 import zmq
 

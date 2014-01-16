@@ -57,14 +57,6 @@ if version_info < (2,1,0):
 
 from tornado import httpserver
 from tornado import web
-#from tornado import options as toptions
-#toptions.parse_command_line(["--logging=debug", "--log_file_prefix=C:/cygwin64/tmp/tornado.log"])
-#access_log = logging.getLogger("tornado.access")
-#access_log.setLevel(logging.DEBUG)
-#app_log = logging.getLogger("tornado.application")
-#app_log.setLevel(logging.DEBUG)
-#gen_log = logging.getLogger("tornado.general")
-#gen_log.setLevel(logging.DEBUG)
 
 # Our own libraries
 from IPython.html import DEFAULT_STATIC_FILES_PATH

@@ -25,7 +25,6 @@ import nose.tools as nt
 from IPython.kernel import BlockingKernelClient
 from IPython.utils import path, py3compat
 
-import minilog
 
 #-------------------------------------------------------------------------------
 # Tests
@@ -78,34 +77,28 @@ def setup_kernel(cmd):
     )
     # wait for connection file to exist, timeout after 5s
     tic = time.time()
-    minilog.log("setup kernel, waiting for connection file:" + connection_file)
     while not os.path.exists(connection_file) \
         and kernel.poll() is None \
         and time.time() < tic + SETUP_TIMEOUT:
         time.sleep(0.1)
 
-    minilog.log("not anymore")
     if kernel.poll() is not None:
         o,e = kernel.communicate()
         e = py3compat.cast_unicode(e)
         raise IOError("Kernel failed to start:\n%s" % e)
 
-    minilog.log( open(connection_file,"r").read())
     if not os.path.exists(connection_file):
         if kernel.poll() is None:
             kernel.terminate()
         raise IOError("Connection file %r never arrived" % connection_file)
 
-    minilog.log( "trying to communicate with a client")
     client = BlockingKernelClient(connection_file=connection_file)
     client.load_connection_file()
     client.start_channels()
     
     try:
-        minilog.log("about to yield client")
         yield client
     finally:
-        minilog.log("about to terminate")
         client.stop_channels()
         kernel.terminate()
 
@@ -158,7 +151,7 @@ def test_embed_kernel_namespace():
         msg = client.get_shell_msg(block=True, timeout=TIMEOUT)
         content = msg['content']
         nt.assert_true(content['found'])
-        nt.assert_equal(content['string_form'], u'5')
+            nt.assert_equal(content['string_form'], u'5')
 
         # oinfo b (str)
         msg_id = client.object_info('b')
