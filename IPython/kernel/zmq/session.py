@@ -619,13 +619,6 @@ class Session(Configurable):
         longest = max([ len(s) for s in to_send ])
         copy = (longest < self.copy_threshold)
 
-        if sys.platform == 'cli':
-            for i, el in enumerate(to_send):
-                if isinstance(el, bytes):
-                    continue
-                else:
-                    to_send[i] = bytes(el,'iso-8859-1')
-
         if buffers and track and not copy:
             # only really track when we are doing zero-copy buffers
             tracker = stream.send_multipart(to_send, copy=False, track=True)

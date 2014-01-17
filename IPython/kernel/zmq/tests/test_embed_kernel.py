@@ -151,7 +151,7 @@ def test_embed_kernel_namespace():
         msg = client.get_shell_msg(block=True, timeout=TIMEOUT)
         content = msg['content']
         nt.assert_true(content['found'])
-            nt.assert_equal(content['string_form'], u'5')
+        nt.assert_equal(content['string_form'], u'5')
 
         # oinfo b (str)
         msg_id = client.object_info('b')

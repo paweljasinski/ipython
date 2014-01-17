@@ -119,9 +119,9 @@ def unserialize_object(buffers, g=None):
     """
     bufs = list(buffers)
     pobj = bufs.pop(0)
-    if not isinstance(pobj, py3compat.bytes_type):
+    if not isinstance(pobj, bytes):
         # a zmq message
-        pobj = py3compat.bytes_type(pobj)
+        pobj = bytes(pobj)
     canned = pickle.loads(pobj)
     if istype(canned, sequence_types) and len(canned) < MAX_ITEMS:
         for c in canned:

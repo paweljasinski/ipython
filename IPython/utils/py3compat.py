@@ -29,7 +29,11 @@ def cast_unicode(s, encoding=None):
 
 def cast_bytes(s, encoding=None):
     if not isinstance(s, bytes):
-        return encode(s, encoding)
+        if sys.platform != 'cli':
+            return encode(s, encoding)
+        else:
+            # repackage into bytes
+            return bytes(encode(s, encoding), 'iso-8859-1')
     return s
 
 def _modify_str_or_docstring(str_change_func):
@@ -140,6 +144,7 @@ else:
     # IronPython 2.x has str/byte/unicode like 3.x but stdlib 2.x
     if sys.platform == 'cli':
         bytes_to_str = decode
+        str_to_bytes = lambda s: bytes(s, "iso-8859-1") # assume it is bytes in str and not unicode
     
     import re
     _name_re = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*$")
