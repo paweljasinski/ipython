@@ -88,7 +88,6 @@ if sys.version_info[0] >= 3:
     cast_bytes_py2 = no_code
     
     string_types = (str,)
-    bytes_type = bytes
 
     def isidentifier(s, dotted=False):
         if dotted:
@@ -139,7 +138,6 @@ else:
     cast_bytes_py2 = cast_bytes
     
     string_types = (str, unicode)
-    bytes_type = str
 
     # IronPython 2.x has str/byte/unicode like 3.x but stdlib 2.x
     if sys.platform == 'cli':
