@@ -31,7 +31,6 @@ import os
 import pprint
 import random
 import uuid
-import sys
 from datetime import datetime
 
 try:
@@ -78,7 +77,6 @@ def squash_unicode(obj):
 #-----------------------------------------------------------------------------
 # globals and defaults
 #-----------------------------------------------------------------------------
-
 
 # ISO8601-ify datetime objects
 json_packer = lambda obj: jsonapi.dumps(obj, default=date_default)
@@ -618,7 +616,7 @@ class Session(Configurable):
         to_send.extend(buffers)
         longest = max([ len(s) for s in to_send ])
         copy = (longest < self.copy_threshold)
-
+        
         if buffers and track and not copy:
             # only really track when we are doing zero-copy buffers
             tracker = stream.send_multipart(to_send, copy=False, track=True)
