@@ -564,7 +564,7 @@ class ZMQInteractiveShell(InteractiveShell):
         # to pick up
         topic = None
         if dh.topic:
-            topic = dh.topic.replace(py3compat.bytes_type('pyout'), py3compat.bytes_type('pyerr'))
+            topic = dh.topic.replace(b'pyout', b'pyerr')
         
         exc_msg = dh.session.send(dh.pub_socket, u'pyerr', json_clean(exc_content), dh.parent_header, ident=topic)
 
