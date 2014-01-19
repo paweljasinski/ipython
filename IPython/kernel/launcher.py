@@ -190,7 +190,7 @@ def launch_kernel(cmd, stdin=None, stdout=None, stderr=None,
         _stdout, _stderr = stdout, stderr
 
     # Spawn a kernel.
-    if sys.platform == 'win32' or sys.platform == 'cli': # TODO: be clever about mono
+    if sys.platform == 'win32' or sys.platform == 'cli':
         
         if cwd and sys.platform == 'win32':
             # Popen on Python 2 on Windows cannot handle unicode cwd.

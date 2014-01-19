@@ -324,7 +324,6 @@ class NotebookApp(BaseIPythonApplication):
         cookie_secret stored in plaintext (you can read the value from a file).
         """
     )
-
     def _cookie_secret_default(self):
         return py3compat.str_to_bytes(os.urandom(1024))
 
