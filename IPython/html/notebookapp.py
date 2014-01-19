@@ -621,20 +621,37 @@ class NotebookApp(BaseIPythonApplication):
         print self.notebook_info()
         sys.stdout.write("Shutdown this notebook server (y/[n])? ")
         sys.stdout.flush()
-        r,w,x = select.select([sys.stdin], [], [], 5)
-        if r:
-            line = sys.stdin.readline()
-            if line.lower().startswith('y'):
-                self.log.critical("Shutdown confirmed")
-                ioloop.IOLoop.instance().stop()
-                return
+        if sys.platform != 'cli': # win32?
+            r,w,x = select.select([sys.stdin], [], [], 5)
+            if r:
+                line = sys.stdin.readline()
+                if line.lower().startswith('y'):
+                    self.log.critical("Shutdown confirmed")
+                    ioloop.IOLoop.instance().stop()
+                    return
+            else:
+                print "No answer for 5s:",
+            print "resuming operation..."
+            # no answer, or answer is no:
+            # set it back to original SIGINT handler
+            # use IOLoop.add_callback because signal.signal must be called
+            # from main thread
         else:
-            print "No answer for 5s:",
-        print "resuming operation..."
-        # no answer, or answer is no:
-        # set it back to original SIGINT handler
-        # use IOLoop.add_callback because signal.signal must be called
-        # from main thread
+            import msvcrt
+            startTime = time.time()
+            while True:
+                if msvcrt.kbhit():
+                    if msvcrt.getch().lower() == 'y':
+                        self.log.critical("Shutdown confirmed")
+                        ioloop.IOLoop.instance().stop()
+                        return
+                    break # any other key
+                elif time.time() - startTime > 5:
+                    print "No answer for 5s:",
+                    break
+                time.sleep(0.1)
+            print "resuming operations..."
+
         ioloop.IOLoop.instance().add_callback(self._restore_sigint_handler)
     
     def _signal_stop(self, sig, frame):
